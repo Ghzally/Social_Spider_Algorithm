@@ -20,7 +20,7 @@ class Spider:
 
     def printout(self):
         print("position = "+str(self.s))
-        print("previous position = " + str(self.s))
+        print("previous position = " + str(self.s_previous))
         print("fitness = "+str(self.fs))
         self.vibration.printout()
         print("Cs = "+str(self.cs))
@@ -48,8 +48,8 @@ def distance(pa, pb):
     return la.norm(pa - pb, 1)  # D(Pa;Pb)
 
 
-def intensity_position_pa_position_pb(pa, pb, sd):  # pa spider a & pb spider b, I(Pa;Pb; t)
-    return pa.vibration.intensity_position_ps_position_ps(pa.fs)*math.exp((-distance(pa.s, pb.s))/(ra * sd))
+def intensity_position_pa_position_pb(pa, pb, sd, vibration_pa):  # pa spider a & pb spider b, I(Pa;Pb; t)
+    return vibration_pa.intensity*math.exp((-distance(pa.s, pb.s))/(ra * sd))
 
 
 # Calculate Standard_Deviation σ along each dimension
@@ -102,8 +102,8 @@ def out_of_bounds(position):
 
 
 def initialization():
-    global c, ra, pc, pm, y, n, population, spiders, bounds
-    c = -0.1  # where C is a small constant such  fitness values are larger than C
+    global c, ra, pc, pm, y, n, population, spiders, bounds, lim
+    c = -2000000  # where C is a small constant such  fitness values are larger than C
 
     set_ra = {1 / 10, 1 / 5, 1 / 4, 1 / 3, 1 / 2, 1, 2, 3, 4, 5}
     ra = random.choice(tuple(set_ra))
@@ -114,7 +114,7 @@ def initialization():
 
     print("ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
 
-    y = "z[0]**2 + z[1]**2 + z[2]**2 + z[3]**2 + z[4]**2"
+    y = "1000000*z[0]**2 + 1000000*z[1]**2 + 1000000*z[2]**2 + 1000000*z[3]**2 + z[4]**2"
     n = 5  # dimensions
     # solution space or domain of definition [a , b] each dimensions
     bounds = np.array([[-5, 5],
@@ -122,10 +122,12 @@ def initialization():
                       [-15, 15],
                       [-12, 12],
                       [-10, 10]])
-
-    # create a population of spiders
     population = 10
+    lim = 100  # max steps of iterations
     spiders = []
+
+
+def create_population_of_spiders():
     for x in range(population):
         s = np.zeros(n)
         for x1 in range(n):
@@ -136,9 +138,9 @@ def initialization():
 
 def social_spider_algorithm():
     initialization()
+    create_population_of_spiders()
     minimize = spiders[0].s
     number_of_iterations = 0
-    lim = 10
 
     # In the iteration phase
     while number_of_iterations <= lim:
@@ -162,7 +164,7 @@ def social_spider_algorithm():
             max_vibration = Vibration(np.zeros(n), -1)
             for t in range(population):
                 if x != t:
-                    intensity = intensity_position_pa_position_pb(spiders[x], spiders[t], sd)
+                    intensity = intensity_position_pa_position_pb(spiders[x], spiders[t], sd, generate_vibration[x])
                     # print("intensity_spider"+str(x)+"_spider"+str(y)+" = "+str(intensity))
                     if max_vibration.intensity < intensity:
                         max_vibration.set_position_and_intensity(spiders[t].s, intensity)
@@ -193,7 +195,7 @@ def social_spider_algorithm():
             print("new mask_all_zeros_all_ones = " + str(spiders[x].mask))
 
             p_s_fo = np.array([])  # position  is generated based on the mask for s
-            r = random.randint(0, population - 1)
+            r = random.randint(0, population - 2)
             for d in range(n):
                 if spiders[x].mask[d] == 0:
                     p_s_fo = np.append(p_s_fo, spiders[x].vibration.position[d])
@@ -202,7 +204,6 @@ def social_spider_algorithm():
             print("p_s_fo = " + str(p_s_fo))
 
             # Calculate next position
-            print(str(n))
             R = np.random.uniform(0, 1, n)
             next_position = spiders[x].s + (spiders[x].s - spiders[x].s_previous) * r + (p_s_fo - spiders[x].s) * R
             spiders[x].s_previous = spiders[x].s
@@ -225,6 +226,7 @@ def social_spider_algorithm():
 
     print("global minimize = " + str(minimize))
     print("f(minimize) = " + str(f(minimize)))
+    return 0
 
 
 social_spider_algorithm()
