@@ -201,9 +201,7 @@ def social_spider_algorithm(graph):
         if graph and n == 2:
             graphics([atr.s[0] for atr in spiders], [atr.s[1] for atr in spiders])
         number_of_iterations += 1
-    print("global minimize = " + str(minimize))
-    print("f(minimize) = " + str(f(minimize)))
-    return 0
+    return "global minimize = " + str(minimize)+'\n'+"f(minimize) = " + str(f(minimize))
 
 
 # Sphere function minimum = 0
@@ -215,7 +213,7 @@ def test_function_0():
     set_pc_and_pm = {0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99}
     pc = random.choice(tuple(set_pc_and_pm))
     pm = random.choice(tuple(set_pc_and_pm))
-    print("ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
+    print('\n'+"ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
     y = "z[0]**2 + z[1]**2 + z[2]**2 + z[3]**2 + z[4]**2"
     n = 5  # dimensions
     # solution space or domain of definition [a , b] each dimensions
@@ -225,7 +223,7 @@ def test_function_0():
                       [-5000, 5000],
                       [-5000, 5000]])
     population = 20
-    lim = 2000  # max steps of iterations
+    lim = 3000  # max steps of iterations
     return
 
 
@@ -238,7 +236,7 @@ def test_function_1():
     set_pc_and_pm = {0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99}
     pc = random.choice(tuple(set_pc_and_pm))
     pm = random.choice(tuple(set_pc_and_pm))
-    print("ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
+    print('\n'+"ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
     y = "2*z[0]**2 - 1.05 * z[0]**4 + z[0]**6 /6 + z[0] * z[1] + z[1]**2"
     n = 2
     bounds = np.array([[-5, 5],
@@ -257,7 +255,7 @@ def test_function_2():
     set_pc_and_pm = {0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99}
     pc = random.choice(tuple(set_pc_and_pm))
     pm = random.choice(tuple(set_pc_and_pm))
-    print("ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
+    print('\n'+"ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
     y = "math.sin(z[0] + z[1]) + (z[0] - z[1])**2 - 1.5 * z[0] + 2.5 * z[1] + 1"
     n = 2
     bounds = np.array([[-1.5, 4],
@@ -276,7 +274,7 @@ def test_function_3():
     set_pc_and_pm = {0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99}
     pc = random.choice(tuple(set_pc_and_pm))
     pm = random.choice(tuple(set_pc_and_pm))
-    print("ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
+    print('\n'+"ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
     y = "0.5 + ((math.cos(math.sin(abs(z[0]**2 - z[1]**2)))**2 - 0.5) / (1 + 0.001*(z[0]**2 + z[1]**2))**2)"
     n = 2
     bounds = np.array([[-100, 100],
@@ -287,16 +285,21 @@ def test_function_3():
 
 
 # Code for Test
+
+
 for test in range(20):
-    print('\n' + colored("Τest "+str(test + 1), 'blue'))
-    test_function_0()
-    social_spider_algorithm(False)
+    test_function_1()
+    print('\n' + colored("Τest "+str(test + 1), 'blue')+'\n'+social_spider_algorithm(False))
+
 
 
 # test_function_3()
 # social_spider_algorithm(True)
 
-
+# file = open("test.txt", "w+")
+# file.write('\n'+"ra = " + str(ra) + '\n' + "pc = " + str(pc) + "  pm = " + str(pm) + '\n')
+# file.write('\n' + "Τest "+str(test + 1)+'\n'+social_spider_algorithm(False))
+# file.close()
 
 
 
