@@ -286,7 +286,6 @@ def test_function_3():
 
 # Code for Test
 
-
 for test in range(20):
     test_function_1()
     print('\n' + colored("Τest "+str(test + 1), 'blue')+'\n'+social_spider_algorithm(False))
